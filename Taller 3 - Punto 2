@@ -1,0 +1,42 @@
+const int pinPotenciometro = 34;
+const int pinLED = 18;
+
+int valorPotenciometro = 0;
+int intensidadPWM = 0;
+int porcentaje = 0;
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(pinPotenciometro, INPUT);
+  pinMode(pinLED, OUTPUT);
+
+  Serial.println("DIMMER ESP32");
+}
+
+void loop() {
+  // Leer el potenciometro
+  valorPotenciometro = analogRead(pinPotenciometro);
+
+  // Convertir a un valor PWM de 0 a 255
+  intensidadPWM = map(valorPotenciometro, 0, 4095, 0, 255);
+
+  // Regular el brillo del LED
+  analogWrite(pinLED, intensidadPWM);
+
+  // Calcular el porcentaje de intensidad
+  porcentaje = map(intensidadPWM, 0, 255, 0, 100);
+
+  // Mostrar los resultados
+  Serial.print("Lectura: ");
+  Serial.print(valorPotenciometro);
+
+  Serial.print(" | PWM: ");
+  Serial.print(intensidadPWM);
+
+  Serial.print(" | Intensidad: ");
+  Serial.print(porcentaje);
+  Serial.println("%");
+
+  delay(200);
+}
