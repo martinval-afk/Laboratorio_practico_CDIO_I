@@ -1,0 +1,13 @@
+int PULSADOR = 18; // pulsador en el pin 18
+int LED = 26; // led en el pin 26
+void setup() {
+ pinMode(PULSADOR, INPUT); // pulsador pin18 entrada
+ pinMode(LED, OUTPUT); // led pin26 salida
+}
+void loop() {
+ if (digitalRead(PULSADOR) == HIGH) { // Si el pulsador se presiona:
+ digitalWrite(LED, HIGH); // encienda el led
+ } else {
+ digitalWrite(LED, LOW); // de lo contrario apague el led
+ }
+}
