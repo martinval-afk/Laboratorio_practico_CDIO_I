@@ -1,0 +1,41 @@
+const int POT = 34;
+
+const int PWMA = 25;
+const int AIN1 = 26;
+const int AIN2 = 27;
+const int STBY = 14;
+
+int lectura;
+int velocidad;
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(PWMA, OUTPUT);
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+  pinMode(STBY, OUTPUT);
+
+  digitalWrite(STBY, HIGH);
+
+  digitalWrite(AIN1, HIGH);
+  digitalWrite(AIN2, LOW);
+
+  Serial.println("Motor DC - TB6612FNG");
+}
+
+void loop() {
+  lectura = analogRead(POT);
+
+  velocidad = map(lectura, 0, 4095, 0, 255);
+
+  analogWrite(PWMA, velocidad);
+
+  Serial.print("Potenciometro: ");
+  Serial.print(lectura);
+
+  Serial.print(" | PWM: ");
+  Serial.println(velocidad);
+
+  delay(200);
+}
