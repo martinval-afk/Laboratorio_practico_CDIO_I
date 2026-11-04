@@ -1,0 +1,121 @@
+
+const int PWMA = 25;
+const int AIN1 = 26;
+const int AIN2 = 27;
+
+const int PWMB = 33;
+const int BIN1 = 18;
+const int BIN2 = 19;
+
+const int STBY = 14;
+
+const int VELOCIDAD = 200;
+
+void detenerMotores() {
+  analogWrite(AIN1, 0);
+  analogWrite(AIN2, 0);
+  analogWrite(BIN1, 0);
+  analogWrite(BIN2, 0);
+}
+
+void motorIzquierdoAdelante() {
+  analogWrite(AIN2, 0);
+  analogWrite(AIN1, VELOCIDAD);
+}
+
+void motorIzquierdoAtras() {
+  analogWrite(AIN1, 0);
+  analogWrite(AIN2, VELOCIDAD);
+}
+
+void motorDerechoAdelante() {
+  analogWrite(BIN2, 0);
+  analogWrite(BIN1, VELOCIDAD);
+}
+
+void motorDerechoAtras() {
+  analogWrite(BIN1, 0);
+  analogWrite(BIN2, VELOCIDAD);
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(PWMA, OUTPUT);
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+
+  pinMode(PWMB, OUTPUT);
+  pinMode(BIN1, OUTPUT);
+  pinMode(BIN2, OUTPUT);
+
+  pinMode(STBY, OUTPUT);
+
+  digitalWrite(STBY, HIGH);
+  digitalWrite(PWMA, HIGH);
+  digitalWrite(PWMB, HIGH);
+
+  detenerMotores();
+
+  Serial.println("CONTROL DIFERENCIAL");
+  Serial.println("F = Avanzar");
+  Serial.println("B = Retroceder");
+  Serial.println("L = Girar a la izquierda");
+  Serial.println("R = Girar a la derecha");
+  Serial.println("P = Giro sobre su propio eje");
+  Serial.println("S = Detener");
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char comando = Serial.read();
+
+    if (comando >= 'a' && comando <= 'z') {
+      comando -= 32;
+    }
+
+    if (comando == '\n' || comando == '\r') return;
+
+    detenerMotores();
+
+    switch (comando) {
+
+      case 'F':
+        motorIzquierdoAdelante();
+        motorDerechoAdelante();
+        Serial.println("AVANZANDO");
+        break;
+
+      case 'B':
+        motorIzquierdoAtras();
+        motorDerechoAtras();
+        Serial.println("RETROCEDIENDO");
+        break;
+
+      case 'L':
+        motorDerechoAdelante();
+        Serial.println("GIRO A LA IZQUIERDA");
+        break;
+
+      case 'R':
+        motorIzquierdoAdelante();
+        Serial.println("GIRO A LA DERECHA");
+        break;
+
+      case 'P':
+        motorIzquierdoAtras();
+        motorDerechoAdelante();
+        Serial.println("GIRO SOBRE SU PROPIO EJE");
+        break;
+
+      case 'S':
+        detenerMotores();
+        Serial.println("MOTORES DETENIDOS");
+        break;
+
+      default:
+        Serial.println("COMANDO NO RECONOCIDO");
+        break;
+    }
+  }
+}
