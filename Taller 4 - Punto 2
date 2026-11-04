@@ -1,0 +1,16 @@
+const int BUMPER = 18;
+
+void setup() {
+  pinMode(BUMPER, INPUT_PULLUP);
+  Serial.begin(115200);
+}
+
+void loop() {
+  if (digitalRead(BUMPER) == LOW) {
+    Serial.println("CHOQUE DETECTADO");
+  } else {
+    Serial.println("SIN CHOQUE");
+  }
+
+  delay(200);
+}
