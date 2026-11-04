@@ -1,0 +1,11 @@
+const int analogInPin = 32; // pin del potenciómetro
+int resistorValue = 0; // valor leído del potenciómetro
+void setup() {
+Serial.begin(9600); // comunicación serial a 9600 bps
+}
+void loop() {
+resistorValue = analogRead(analogInPin); // lee la entrada analógica
+Serial.print("sensor = ");
+Serial.println(resistorValue);
+delay(5); // espera a que el ADC se estabilice
+}
