@@ -1,0 +1,67 @@
+const int POT = 34;
+const int PWMA = 25;
+const int AIN1 = 26;
+const int AIN2 = 27;
+const int STBY = 14;
+
+const int CENTRO_MIN = 1500;
+const int CENTRO_MAX = 2300;
+const int MIN_PWM = 100;
+
+int lectura = 0;
+int velocidad = 0;
+
+void detenerMotor() {
+  analogWrite(AIN1, 0);
+  analogWrite(AIN2, 0);
+
+  digitalWrite(PWMA, HIGH);
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(PWMA, OUTPUT);
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+  pinMode(STBY, OUTPUT);
+
+  digitalWrite(STBY, HIGH);
+  digitalWrite(PWMA, HIGH);
+
+  detenerMotor();
+}
+
+void loop() {
+  lectura = analogRead(POT);
+
+  if (lectura >= CENTRO_MIN && lectura <= CENTRO_MAX) {
+    detenerMotor();
+    Serial.println("MOTOR DETENIDO");
+  }
+
+  else if (lectura > CENTRO_MAX) {
+    velocidad = map(lectura, CENTRO_MAX, 4095, MIN_PWM, 255);
+
+    analogWrite(AIN2, 0);
+    analogWrite(AIN1, velocidad);
+
+    Serial.print("AVANCE | PWM: ");
+    Serial.println(velocidad);
+  }
+
+  else {
+    velocidad = map(lectura, 0, CENTRO_MIN, 255, MIN_PWM);
+
+    analogWrite(AIN1, 0);
+    analogWrite(AIN2, velocidad);
+
+    Serial.print("RETROCESO | PWM: ");
+    Serial.println(velocidad);
+  }
+
+  Serial.print("Potenciometro: ");
+  Serial.println(lectura);
+
+  delay(100);
+}
