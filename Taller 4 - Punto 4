@@ -1,0 +1,24 @@
+const int SENSOR_PISO = 34;
+const int UMBRAL = 2000;
+
+int lectura;
+
+void setup() {
+  Serial.begin(115200);
+  analogReadResolution(12);
+}
+
+void loop() {
+  lectura = analogRead(SENSOR_PISO);
+
+  Serial.print("Lectura: ");
+  Serial.print(lectura);
+
+  if (lectura < UMBRAL) {
+    Serial.println(" | BORDE DETECTADO");
+  } else {
+    Serial.println(" | PISO DETECTADO");
+  }
+
+  delay(300);
+}
