@@ -1,0 +1,24 @@
+int PULSADOR = 18; // Pulsador conectado al GPIO 18
+int LED = 16;      // LED conectado al GPIO 16
+int ultimoP=HIGH;
+int estadoP=HIGH;
+
+void setup() {
+  pinMode(PULSADOR, INPUT_PULLUP); // Activa pull-up interno
+  pinMode(LED, OUTPUT);            // LED como salida
+
+  digitalWrite(LED, LOW); // LED encendido inicialmente
+  estadoP=digitalRead((PULSADOR));
+}
+
+void loop() {
+  estadoP = digitalRead(PULSADOR);
+  if (estadoP == LOW && ultimoP==HIGH) {
+    if (digitalRead(LED)==HIGH){
+    digitalWrite(LED, LOW);  // Apaga el LED al presionar
+    } else {
+    digitalWrite(LED, HIGH); // Enciende el LED al soltar
+    }
+  }
+  ultimoP=estadoP;
+}
